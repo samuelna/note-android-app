@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Notes</string>
+    <string name="create_new_note">New Note</string>
+    <string name="delete_all_note">Delete All</string>
+    <string name="delete_multiple_note">Delete Notes</string>
+    <string name="title_activity_editor">EditorActivity</string>
+
+</resources>
