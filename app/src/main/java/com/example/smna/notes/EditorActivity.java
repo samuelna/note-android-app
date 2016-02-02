@@ -1,10 +1,12 @@
 package com.example.smna.notes;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -92,7 +94,24 @@ public class EditorActivity extends AppCompatActivity {
                 break;
             // trash icon
             case R.id.delete_icon:
-                deleteNote();
+                // alert dialog asking for confirmation if the user wants to delete all notes
+                final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(EditorActivity.this);
+                alertBuilder.setMessage("Delete Note?");
+                alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteNote();
+                    }
+                });
+                alertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog dialog = alertBuilder.create();
+                dialog.show();
                 break;
         }
 

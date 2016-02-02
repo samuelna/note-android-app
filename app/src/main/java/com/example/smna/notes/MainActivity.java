@@ -113,8 +113,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 alertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // update the contents and UI
-                        getLoaderManager().initLoader(0, null, MainActivity.this);
+                        dialog.cancel();
                     }
                 });
 
