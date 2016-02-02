@@ -9,13 +9,19 @@
         android:id="@+id/create_new_note"
         android:title="@string/create_new_note"
         android:orderInCategory="1"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/delete_some_notes"
+        android:title="Delete Notes"
+        android:orderInCategory="2"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/delete_all_notes"
         android:title="@string/delete_all_note"
         android:orderInCategory="3"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 
 
 

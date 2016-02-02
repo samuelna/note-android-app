@@ -130,6 +130,7 @@ public class EditorActivity extends AppCompatActivity {
             case Intent.ACTION_INSERT:
                 if (newTxt.length() == 0) {
                     setResult(RESULT_CANCELED);
+                    Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     insertNote(newTitle, newTxt);
@@ -179,6 +180,8 @@ public class EditorActivity extends AppCompatActivity {
         values.put(DatabaseHelper.NOTE_TITLE, title);
         values.put(DatabaseHelper.NOTE_TEXT, txt);
         getContentResolver().insert(Provider.CONTENT_URI, values);
+
+        Toast.makeText(this, "Created Note", Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK);
     }
 

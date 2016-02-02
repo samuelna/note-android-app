@@ -100,25 +100,35 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
                 startActivityForResult(intent, REQUEST_CODE);
                 break;
+            case R.id.delete_some_notes:
+                // show boxes to check off from the list and delete only the checked notes
+                break;
             case R.id.delete_all_notes:
-                // alert dialog asking for confirmation if the user wants to delete all notes
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
-                alertBuilder.setMessage("Delete All Notes?");
-                alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteAllNotes();
-                    }
-                });
-                alertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                // check if list is empty
+                if (cursorAdapter.getCount() == 0) {
+                    // do nothing
+                    Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    // alert dialog asking for confirmation if the user wants to delete all notes
+                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
+                    alertBuilder.setMessage("Delete All Notes?");
+                    alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            deleteAllNotes();
+                        }
+                    });
+                    alertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
 
-                AlertDialog dialog = alertBuilder.create();
-                dialog.show();
+                    AlertDialog dialog = alertBuilder.create();
+                    dialog.show();
+                }
                 break;
         }
 
