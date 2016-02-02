@@ -25,7 +25,7 @@ public class Provider extends ContentProvider {
     static final String NOTE_TYPE = "Note";
 
     // helps with content provider with many Uri
-    static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);;
+    static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     static {
         uriMatcher.addURI(AUTHORITY, "notes", NOTES);
         uriMatcher.addURI(AUTHORITY, "notes/#", NOTES_ID);
@@ -54,8 +54,13 @@ public class Provider extends ContentProvider {
         }
 
         // return in descending order
-        return db.query(DatabaseHelper.TABLE_NOTES, DatabaseHelper.ALL_COLUMNS,
-                selection, null, null, null, DatabaseHelper.NOTE_CREATED + " DESC");
+        /*
+            example of the query method arguments
+            Cursor c = sqLiteDatabase.query("table1", tableColumns, whereClause, whereArgs, null, null, orderBy);
+         */
+        // return db.query(DatabaseHelper.TABLE_NOTES, DatabaseHelper.ALL_COLUMNS,
+                // selection, null, null, null, DatabaseHelper.NOTE_CREATED + " DESC");
+        return db.query(DatabaseHelper.TABLE_NOTES, DatabaseHelper.ALL_COLUMNS, selection, null, null, null, DatabaseHelper.NOTE_CREATED + " DESC");
     }
 
 

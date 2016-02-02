@@ -12,10 +12,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     static final int DATABASE_VERSION = 2;
 
     public static final String NOTE_ID = "_id"; // column id
+    public static final String NOTE_TITLE = "noteTitle"; // column noteTitle
     public static final String NOTE_TEXT = "noteText"; // column noteText
     public static final String NOTE_CREATED = "noteCreated"; // column noteCreated which is the time
-    public static final String[] ALL_COLUMNS = {NOTE_ID, NOTE_TEXT, NOTE_CREATED};
-    // public static final String NOTE_TITLE = "noteTitle";
+
+
+    public static final String[] ALL_COLUMNS = {NOTE_ID, NOTE_TITLE, NOTE_TEXT, NOTE_CREATED};
 
 
     // table columns
@@ -24,24 +26,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
     (creates an empty table called notes)
             notes
-            --------------------------------
-            | _id | noteText | noteCreated |
-            --------------------------------
-            |     |          |             |
-            |     |          |             |
-            |     |          |             |
-            --------------------------------
+            ------------------------------------------
+            | id  | noteTitle |noteText  | noteCreated |
+            ------------------------------------------
+            |     |           |          |            |
+            |     |           |          |            |
+            |     |           |          |            |
+            -------------------------------------------
      */
     private static final String TABLE_CREATE =
             "CREATE TABLE " + TABLE_NOTES +
-                    " (" +                                                      // definitions of SQLite data types
-                    // examples:    "TEXT NOT NULL", "REAL NOT NULL"
+                    " (" +                                                       // definitions of SQLite data types
+                                                                                // examples:    "TEXT NOT NULL", "REAL NOT NULL"
                     NOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +      // INTEGER PRIMARY KEY AUTOINCREMENT -> type is INTEGER
-                    // PRIMARY KEY -> the identification for the database table
-                    // and AUTOINCREMENT -> increments every new data
+                                                                            // PRIMARY KEY -> the identification for the database table
+                                                                            // and AUTOINCREMENT -> increments every new data
+                    NOTE_TITLE + " TEXT, " +                                   // the type is text only
                     NOTE_TEXT + " TEXT, " +                                 // the type is text only
                     NOTE_CREATED + " TEXT default CURRENT_TIMESTAMP" +      // type is TEXT, default value of current timestamp
-                    ")";
+                    "); " ;
 
 
     // constructor

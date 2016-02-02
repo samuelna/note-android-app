@@ -20,6 +20,7 @@ public class EditorActivity extends AppCompatActivity {
     // keep track of note, used for updating note
     private String noteFilter;
     private String oldText;
+    private String oldTitle;
 
 
     @Override
@@ -58,9 +59,11 @@ public class EditorActivity extends AppCompatActivity {
             // to the first row
             cursor.moveToFirst();
             // allows editor to hold the saved data and focus at the end
+            oldTitle = cursor.getString(cursor.getColumnIndex(DatabaseHelper.NOTE_TITLE));
+            title.setText(oldTitle);
+
             oldText = cursor.getString(cursor.getColumnIndex(DatabaseHelper.NOTE_TEXT));
             editor.setText(oldText);
-            editor.requestFocus();
         }
 
     } // onCreate
@@ -101,7 +104,7 @@ public class EditorActivity extends AppCompatActivity {
     // if no change, nothing
     // if added, update note
     private void finishEditing() {
-        // newTxt is title of note
+        String newTitle = title.getText().toString().trim();
         String newTxt = editor.getText().toString().trim();
 
         switch (action) {
@@ -110,18 +113,18 @@ public class EditorActivity extends AppCompatActivity {
                     setResult(RESULT_CANCELED);
                 }
                 else {
-                    insertNote(newTxt);
+                    insertNote(newTitle, newTxt);
                 }
                 break;
             case Intent.ACTION_EDIT:
                 if (newTxt.length() == 0) {
                     deleteNote();
                 }
-                else if (oldText.equals(newTxt)) {
+                else if (oldTitle.equals(newTitle) && oldText.equals(newTxt)) {
                     setResult(RESULT_CANCELED);
                 }
                 else {
-                    updateNote(newTxt);
+                    updateNote(newTitle, newTxt);
                 }
         }
         finish();
@@ -137,17 +140,24 @@ public class EditorActivity extends AppCompatActivity {
 
 
     // update a note to table
-    private void updateNote(String txt) {
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.NOTE_TEXT, txt);
-        getContentResolver().update(Provider.CONTENT_URI, values, noteFilter, null);
+    private void updateNote(String title, String txt) {
+        ContentValues titleValues = new ContentValues();
+        ContentValues noteValues = new ContentValues();
+
+        titleValues.put(DatabaseHelper.NOTE_TITLE, title);
+        noteValues.put(DatabaseHelper.NOTE_TEXT, txt);
+
+        getContentResolver().update(Provider.CONTENT_URI, titleValues, noteFilter, null);
+        getContentResolver().update(Provider.CONTENT_URI, noteValues, noteFilter, null);
+
         Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK);
     }
 
     // new note
-    private void insertNote(String txt) {
+    private void insertNote(String title, String txt) {
         ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.NOTE_TITLE, title);
         values.put(DatabaseHelper.NOTE_TEXT, txt);
         getContentResolver().insert(Provider.CONTENT_URI, values);
         setResult(RESULT_OK);

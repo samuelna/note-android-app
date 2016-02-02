@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     // to identify the intent
     private static final int REQUEST_CODE = 1;
     private CursorAdapter cursorAdapter;
-    private String[] from = {DatabaseHelper.NOTE_TEXT};
+    private String[] from = {DatabaseHelper.NOTE_TITLE};
     private int[] to = {R.id.textview};
     private ListView listView;
 
@@ -77,15 +77,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     } // onCreate
 
 
-    // create new note
-    private void insertNote(String txt) {
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.NOTE_TEXT, txt);
-        Uri note_uri = getContentResolver().insert(Provider.CONTENT_URI, values);
-        restartLoader();
-    }
-
-
     // came with blank activity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -106,7 +97,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // menu options in the handle bar
         switch (id) {
             case R.id.create_new_note:
-                insertNote("New Note");
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
                 break;
             case R.id.delete_all_notes:
                 deleteAllNotes();
