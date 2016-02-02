@@ -1,14 +1,15 @@
 package com.example.smna.notes;
 
 import android.app.LoaderManager;
-import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -30,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private ListView listView;
 
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -101,7 +101,25 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivityForResult(intent, REQUEST_CODE);
                 break;
             case R.id.delete_all_notes:
-                deleteAllNotes();
+                // alert dialog asking for confirmation if the user wants to delete all notes
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
+                alertBuilder.setMessage("Delete All Notes?");
+                alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteAllNotes();
+                    }
+                });
+                alertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // update the contents and UI
+                        getLoaderManager().initLoader(0, null, MainActivity.this);
+                    }
+                });
+
+                AlertDialog dialog = alertBuilder.create();
+                dialog.show();
                 break;
         }
 
