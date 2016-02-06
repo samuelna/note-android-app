@@ -44,7 +44,6 @@ public class Provider extends ContentProvider {
         return true;
     }
 
-
     // query the given notes table
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
@@ -63,13 +62,11 @@ public class Provider extends ContentProvider {
         return db.query(DatabaseHelper.TABLE_NOTES, DatabaseHelper.ALL_COLUMNS, selection, null, null, null, DatabaseHelper.NOTE_CREATED + " DESC");
     }
 
-
     @Nullable
     @Override
     public String getType(Uri uri) {
         return null;
     }
-
 
     // insert new data into content provider
     @Nullable

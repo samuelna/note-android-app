@@ -58,18 +58,25 @@ public class EditorActivity extends AppCompatActivity {
             Cursor cursor = getContentResolver().query(uri, DatabaseHelper.ALL_COLUMNS,
                     noteFilter, null, null);
 
-            // to the first row
-            cursor.moveToFirst();
-            // allows editor to hold the saved data and focus at the end
-            oldTitle = cursor.getString(cursor.getColumnIndex(DatabaseHelper.NOTE_TITLE));
-            title.setText(oldTitle);
+            // check if cursor is greater zero
+            if (cursor.getCount() > 0) {
+                // to the first row
+                cursor.moveToFirst();
+                // allows editor to hold the saved data and focus at the end
+                oldTitle = cursor.getString(cursor.getColumnIndex(DatabaseHelper.NOTE_TITLE));
+                title.setText(oldTitle);
 
-            oldText = cursor.getString(cursor.getColumnIndex(DatabaseHelper.NOTE_TEXT));
-            editor.setText(oldText);
+                oldText = cursor.getString(cursor.getColumnIndex(DatabaseHelper.NOTE_TEXT));
+                editor.setText(oldText);
+            }
+            else {
+                // fail gracefully if cursor returns null
+                Toast.makeText(this, "Failed Action", Toast.LENGTH_SHORT).show();
+            }
+
         }
 
     } // onCreate
-
 
     // for trash icon to delete
     @Override
@@ -80,8 +87,6 @@ public class EditorActivity extends AppCompatActivity {
         }
         return true;
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -117,7 +122,6 @@ public class EditorActivity extends AppCompatActivity {
 
         return true;
     }
-
 
     // if the update means no more text, then note is deleted
     // if no change, nothing
@@ -158,7 +162,6 @@ public class EditorActivity extends AppCompatActivity {
         finish();
     }
 
-
     // update a note to table
     private void updateNote(String title, String txt) {
         ContentValues titleValues = new ContentValues();
@@ -185,12 +188,10 @@ public class EditorActivity extends AppCompatActivity {
         setResult(RESULT_OK);
     }
 
-
     // to save the editing note
     @Override
     public void onBackPressed() {
         finishEditing();
     }
 
-
-}
+} // end editor activity

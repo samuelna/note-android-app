@@ -52,12 +52,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);
     }
-
 
     // called when database_version variable changes
     // it deletes table if they exists, then create again

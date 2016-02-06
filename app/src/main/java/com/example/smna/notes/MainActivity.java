@@ -12,7 +12,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,6 +22,8 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -71,20 +75,29 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
+        // registering for context menu
+        registerForContextMenu(listView);
         // update the contents and UI
         getLoaderManager().initLoader(0, null, this);
 
     } // onCreate
-
 
     // came with blank activity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
 
+    // create context menu
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
 
     // came with blank activity
     @Override
@@ -102,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 break;
             case R.id.delete_some_notes:
                 // show boxes to check off from the list and delete only the checked notes
+                deleteSomeNotes();
                 break;
             case R.id.delete_all_notes:
                 // check if list is empty
@@ -135,6 +149,30 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return super.onOptionsItemSelected(item);
     }
 
+    // when context menu is selected
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        // actions when selecting context menu item
+        switch (id) {
+            case R.id.context_edit:
+                // same action as item click event
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                Uri uri = Uri.parse(Provider.CONTENT_URI + "/" + id);
+                intent.putExtra(Provider.NOTE_TYPE, uri);
+                startActivityForResult(intent, REQUEST_CODE);
+                break;
+            case R.id.context_share_note:
+                Toast.makeText(this, "Share test", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.context_delete:
+                Toast.makeText(this, "Delete test", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+        return super.onContextItemSelected(item);
+    }
 
     // delete all notes
     private void deleteAllNotes() {
@@ -143,6 +181,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Toast.makeText(this, "All Notes Are Deleted", Toast.LENGTH_SHORT).show();
     }
 
+    // delete the checked notes
+    private void deleteSomeNotes() {
+        // set the notes in choice mode
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+    }
 
     // update the content to UI
     @Override
@@ -158,19 +202,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         getLoaderManager().restartLoader(0, null, this);
     }
 
-
     // create loader for cursor
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(this, Provider.CONTENT_URI, null, null, null, null);
     }
 
-
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         cursorAdapter.swapCursor(data);
     }
-
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
